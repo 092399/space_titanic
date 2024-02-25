@@ -2,7 +2,9 @@
 
 **Predict which passengers are transported to an alternate dimension**
 
-This is my proposal to resolve this kaggle competition: Spaceship Titanic. You can find all information and resources here:
+My resolution for the kaggle competition: Spaceship Titanic. 
+
+All information and resources here:
 
 [Spaceship Titanic](https://www.kaggle.com/competitions/spaceship-titanic)
 
