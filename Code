@@ -211,16 +211,16 @@ min_max <- function(df, numerical_columns) {
 }
 
 fill_missing_proportional <- function(data, column) {
-  # 指定された列の欠損していない値を取得
+  # Take non-missing values
   non_missing_values <- data[[column]][!is.na(data[[column]])]
   
-  # 非欠損値の数をカウント
+  # Count
   non_missing_count <- length(non_missing_values)
   
-  # 非欠損値の中での割合を計算
+  # Calculate Proportion of non-missing 
   proportions <- table(non_missing_values) / non_missing_count
   
-  # 欠損値を割合に基づいて埋める
+  # Fill out them regarding proportion
   data[[column]][is.na(data[[column]])] <- sample(names(proportions), size = sum(is.na(data[[column]])), replace = TRUE, prob = proportions)
   
   return(data)
@@ -337,23 +337,23 @@ train_df <- subset(train_df, select = -c(HomePlanetMars))
 str(train_df)
 colSums(is.na(train_df))
 
-# 欠損値を予測するためのデータセットを作成する（欠損値のない行）
+# Creating a dataset for predicting missing values (rows without missing values)
 train_data <- train_df[complete.cases(train_df), ]
 
-# 欠損値を含む列を目的変数として選択
+# Selecting the column with missing values as the target variable
 target_col <- "CryoSleep"
 
-# 欠損値を予測するためのモデルを構築（例としてランダムフォレストを使用）
+# Building a model for predicting missing values (using random forest as an example)
 library(randomForest)
 model <- randomForest(CryoSleep ~ .- Age - VIP - Groupnum - Groupsize - CabindeckT, data = train_data)
 
-# 欠損値を含む行のデータを準備
+# Preparing data for rows with missing values
 missing_data <- train_df[!complete.cases(train_df), ]
 
-# 欠損値を予測
+# Predicting missing values
 predicted_values <- predict(model, missing_data)
 
-# 欠損値を予測した値で欠損値を埋める
+# Filling missing values with predicted values
 train_df$CryoSleep[!complete.cases(train_df)] <- predicted_values
 
 ##### Test Dataset #######################################################################################################
@@ -589,22 +589,22 @@ predictions_classes <- ifelse(predictions == "1", 'True', 'False')
 ### Training & Validation 
 
 
-
-# トレーニングデータにモデルを適用
+# Applying the model to the training data
 tree_model_train <- rpart(Transported ~ .-Total_spending, data = train_df, method = "class", cp = 0.001)
 
-# トレーニングデータでの性能評価
+# Performance evaluation on the training data
 predictions_train <- predict(tree_model_train, newdata = trainSet, type = "class")
 accuracy_train <- mean(predictions_train == trainSet$Transported)
 print(paste("Accuracy on training data:", accuracy_train))
 
-# 検証データでの性能評価
+# Performance evaluation on the validation data
 predictions_validation <- predict(tree_model_train, newdata = validationSet, type = "class")
 accuracy_validation <- mean(predictions_validation == validationSet$Transported)
 print(paste("Accuracy on validation data:", accuracy_validation))
 
-# モデルの性能評価
+# Model performance evaluation
 printcp(tree_model_train)
+
 
 
 
@@ -708,4 +708,5 @@ write.csv(sampleSubmission, "~/Desktop/HULT MBANDD/Spring_Term/Business Challeng
 #plan <- designTreatmentsN(dframe      = train_df,  varlist     = informartiveFeatures, outcomename = targetName)
 #treatedTrain <- prepare(plan, trainSet)
 #treatedValidation <- prepare(plan, validationSet) # this is the subset of data from line 30
+
 
